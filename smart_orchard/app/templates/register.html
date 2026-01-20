@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>注册 - 智慧果园管理系统</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍎</text></svg>">
+    <!-- 引入 Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f0f2f5; /* 与登录页一致的背景 */
+            min-height: 100vh;
+            display: flex;
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            padding: 20px 0; /* 防止手机端贴边 */
+        }
+
+        .card-soft {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            background: #fff;
+        }
+
+        .btn-success {
+            padding: 10px 20px;
+            font-weight: 500;
+            background-color: #198754; /* 漂亮的绿色 */
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #157347;
+        }
+
+        .form-control {
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+
+        .form-control:focus {
+            background-color: #fff;
+            box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25); /* 绿色光晕 */
+            border-color: #198754;
+        }
+
+        .brand-logo {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+
+                <!-- 顶部 Logo -->
+                <div class="text-center mb-4">
+                    <span class="brand-logo">🍎</span>
+                    <h3 class="fw-bold text-secondary">加入智慧果园</h3>
+                </div>
+
+                <!-- 注册卡片 -->
+                <div class="card card-soft p-4 p-md-5">
+                    <h4 class="mb-4 fw-bold text-center">创建新账户</h4>
+
+                    <!-- 错误提示 -->
+                    {% if error %}
+                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+                        <small>⚠️ {{ error }}</small>
+                    </div>
+                    {% endif %}
+
+                    <form method="POST">
+                        <!-- 用户名 -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">账号 / Username <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" name="username" placeholder="请输入用户名" required>
+                        </div>
+
+                        <!-- 邮箱 (可选) -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">邮箱 / Email (可选)</label>
+                            <input class="form-control" type="email" name="email" placeholder="example@email.com">
+                        </div>
+
+                        <!-- 密码 -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">密码 / Password <span class="text-danger">*</span></label>
+                            <input class="form-control" type="password" name="password" placeholder="设置登录密码" required>
+                        </div>
+
+                        <!-- 确认密码 -->
+                        <div class="mb-4">
+                            <label class="form-label text-muted small">确认密码 / Confirm <span class="text-danger">*</span></label>
+                            <input class="form-control" type="password" name="confirm_password" placeholder="请再次输入密码" required>
+                        </div>
+
+                        <!-- 按钮区域 -->
+                        <div class="d-grid gap-2 mb-3">
+                            <button class="btn btn-success btn-lg" type="submit">立即注册</button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <span class="text-muted small">已有账号？</span>
+                            <a href="/login" class="text-decoration-none fw-bold text-success">返回登录</a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="text-center mt-4 text-muted small">
+                    &copy; 2026 Smart Orchard IoT System
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

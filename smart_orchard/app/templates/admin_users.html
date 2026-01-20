@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <title>用户管理 - 管理员后台</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍎</text></svg>">
+    <!-- 引入 Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-radius: 10px; }
+        .btn-icon { padding: 4px 8px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <!-- 顶部标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>👥 用户权限管理</h3>
+        <a href="/dashboard" class="btn btn-outline-primary">返回仪表盘</a>
+    </div>
+
+    <!-- 用户列表卡片 -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>角色</th>
+                            <th class="text-end">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td>{{ u.id }}</td>
+                            <td>
+                                <span class="fw-bold text-dark">{{ u.username }}</span>
+                                {% if u.username == username %}
+                                    <span class="badge bg-success ms-1">我</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if u.role == 'admin' %}
+                                    <span class="badge bg-primary">管理员</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">普通用户</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <!-- 编辑按钮 (触发弹窗) -->
+                                <button class="btn btn-sm btn-warning text-white me-1"
+                                        onclick="openEditModal('{{ u.id }}', '{{ u.username }}', '{{ u.role }}')">
+                                    ✏️ 编辑
+                                </button>
+
+                                <!-- 删除按钮 -->
+                                {% if u.username != username %}
+                                    <a href="/admin/delete_user/{{ u.id }}"
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('⚠️ 确定要删除用户 [{{ u.username }}] 吗？\n此操作将同时删除该用户的所有聊天记录和操作日志！')">
+                                        🗑️ 删除
+                                    </a>
+                                {% else %}
+                                    <button class="btn btn-sm btn-secondary" disabled>删除</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 👇👇👇 编辑用户弹窗 (Modal) 👇👇👇 -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">✏️ 编辑用户信息</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/admin/edit_user" method="POST">
+                <div class="modal-body">
+                    <!-- 隐藏字段：存放 User ID -->
+                    <input type="hidden" name="user_id" id="edit_user_id">
+
+                    <!-- 用户名 -->
+                    <div class="mb-3">
+                        <label class="form-label">用户名</label>
+                        <input type="text" class="form-control" name="username" id="edit_username" required>
+                    </div>
+
+                    <!-- 角色选择 -->
+                    <div class="mb-3">
+                        <label class="form-label">角色权限</label>
+                        <select class="form-select" name="role" id="edit_role">
+                            <option value="user">普通用户</option>
+                            <option value="admin">管理员</option>
+                        </select>
+                    </div>
+
+                    <!-- 密码 -->
+                    <div class="mb-3">
+                        <label class="form-label">重置密码</label>
+                        <input type="text" class="form-control" name="password" placeholder="不修改请留空">
+                        <div class="form-text text-muted">如果不需要修改密码，请保持此栏为空。</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 引入 Bootstrap JS (用于弹窗) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // 打开弹窗并填充数据的函数
+    function openEditModal(id, username, role) {
+        // 1. 获取弹窗元素
+        var myModal = new bootstrap.Modal(document.getElementById('editUserModal'));
+
+        // 2. 填充数据到输入框
+        document.getElementById('edit_user_id').value = id;
+        document.getElementById('edit_username').value = username;
+        document.getElementById('edit_role').value = role;
+
+        // 3. 显示弹窗
+        myModal.show();
+    }
+</script>
+
+</body>
+</html>
